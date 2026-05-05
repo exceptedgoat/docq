@@ -1,0 +1,36 @@
+# 虚拟环境
+.venv/
+
+# 运行时生成的文件
+cache/
+chroma_db/
+llm_cache.pkl
+*.pkl
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# 环境变量（含 API Key，绝对不能提交）
+.env
+
+# 自动生成的前端模板
+src/rag/_templates.py
+
+# 旧模块（已重构为 src/rag/）
+src/rag_new/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# PPT 输出（体积大，按需生成）
+*.pptx
