@@ -4,7 +4,9 @@
 # 运行时生成的文件
 cache/
 chroma_db/
+conversations/
 llm_cache.pkl
+conversation_history.json
 *.pkl
 
 # Python
