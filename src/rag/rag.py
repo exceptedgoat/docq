@@ -1,6 +1,8 @@
 """
 主 RAG 协调器：组装所有模块，对外提供统一接口
 """
+import json
+import os
 import sys
 from typing import List, Tuple, Generator
 
@@ -13,6 +15,7 @@ from .query_transformer import QueryTransformer
 from .processor import ParagraphSemanticProcessor
 from .retriever import GeneralHybridRetriever
 from .generator import GeneralGenerator
+from .conversation_store import ConversationStore
 
 
 class GeneralTerminalRAG:
@@ -40,6 +43,8 @@ class GeneralTerminalRAG:
         self.generator = GeneralGenerator(self.llm)
         self.cache = LLMCache(self.config.LLM_CACHE_FILE)
         self.conversation_history: List[Tuple[str, str]] = []
+        self._load_history()
+        self.conv_store = ConversationStore(self.config.CONVERSATIONS_DIR)
 
         print("正在加载和处理文档...")
         self.documents = self.processor.load_documents(self.config.DOCS_DIR)
@@ -89,14 +94,37 @@ class GeneralTerminalRAG:
             yield token
         self.add_to_history(query, full_answer)
 
+    def _load_history(self):
+        try:
+            if os.path.exists(self.config.HISTORY_FILE):
+                with open(self.config.HISTORY_FILE, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                self.conversation_history = [
+                    (item["q"], item["a"]) for item in data
+                ][-self.config.MAX_CONVERSATION_TURNS:]
+                if self.conversation_history:
+                    print(f"  [历史] 已加载 {len(self.conversation_history)} 轮对话", flush=True)
+        except Exception as e:
+            sys.stderr.write(f"[历史] 加载失败: {e}\n"); sys.stderr.flush()
+
+    def _save_history(self):
+        try:
+            data = [{"q": q, "a": a} for q, a in self.conversation_history]
+            with open(self.config.HISTORY_FILE, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            sys.stderr.write(f"[历史] 保存失败: {e}\n"); sys.stderr.flush()
+
     def add_to_history(self, question: str, answer: str):
         self.conversation_history.append((question, answer))
         if len(self.conversation_history) > self.config.MAX_CONVERSATION_TURNS:
             self.conversation_history = (
                 self.conversation_history[-self.config.MAX_CONVERSATION_TURNS:])
+        self._save_history()
 
     def clear_history(self):
         self.conversation_history = []
+        self._save_history()
 
     def run(self):
         print("\n请输入你的问题（输入 'quit' 或 'exit' 退出）：")

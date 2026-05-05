@@ -18,6 +18,8 @@ class GeneralConfig:
     CACHE_DIR      = "./cache"
     CHROMA_DIR     = "./chroma_db"
     LLM_CACHE_FILE = "./llm_cache.pkl"
+    HISTORY_FILE   = "./conversation_history.json"
+    CONVERSATIONS_DIR = "./conversations"
 
     SUPPORTED_EXTENSIONS = [
         ".pdf", ".txt", ".md", ".docx", ".doc",
