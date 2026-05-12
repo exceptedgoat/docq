@@ -7,6 +7,7 @@ chroma_db/
 conversations/
 llm_cache.pkl
 conversation_history.json
+eval_results/
 *.pkl
 
 # Python
@@ -36,3 +37,7 @@ Thumbs.db
 
 # PPT 输出（体积大，按需生成）
 *.pptx
+
+# 本地脚本（不入库）
+gen_ppt.py
+rag_new_v2.py
