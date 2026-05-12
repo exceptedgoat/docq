@@ -110,31 +110,67 @@ class GeneralHybridRetriever:
         scored.sort(key=lambda x: x[1], reverse=True)
         return [d for d, _ in scored[:self.config.RERANK_TOP_K]]
 
-    def invoke(self, original_query: str) -> List[Document]:
-        rewritten = self.query_transformer.rewrite_query(original_query)
-        sys.stderr.write(f"[RETR] rewrite: {rewritten[:60]}\n")
-        sys.stderr.flush()
-        queries = self.query_transformer.generate_multi_queries(rewritten)
-        sys.stderr.write(f"[RETR] {len(queries)} variants\n")
-        sys.stderr.flush()
+    def invoke(self, original_query: str,
+               mode: str | None = None,
+               enable_rerank: bool | None = None,
+               rerank_top_k: int | None = None) -> List[Document]:
+        """混合检索入口，支持运行时覆盖检索策略"""
+        _mode = mode or self.config.RETRIEVAL_MODE
+        _rerank = enable_rerank if enable_rerank is not None else self.config.ENABLE_RERANK
+        _top_k = rerank_top_k or self.config.RERANK_TOP_K
+
+        # 查询改写
+        if self.config.ENABLE_QUERY_REWRITE:
+            rewritten = self.query_transformer.rewrite_query(original_query)
+            sys.stderr.write(f"[RETR] rewrite: {rewritten[:60]}\n")
+            sys.stderr.flush()
+        else:
+            rewritten = original_query
+
+        # 多查询生成
+        if self.config.ENABLE_MULTI_QUERY:
+            queries = self.query_transformer.generate_multi_queries(rewritten)
+            sys.stderr.write(f"[RETR] {len(queries)} variants\n")
+            sys.stderr.flush()
+        else:
+            queries = [rewritten]
+
+        # 双路检索
         all_docs: List[Document] = []
         for q in queries:
-            bm25 = self._bm25_search(q)
-            sem = self._semantic_search(q)
+            if _mode in ("bm25", "hybrid"):
+                bm25 = self._bm25_search(q)
+            else:
+                bm25 = []
+            if _mode in ("semantic", "hybrid"):
+                sem = self._semantic_search(q)
+            else:
+                sem = []
             sys.stderr.write(
                 f"[RETR]   q='{q[:40]}' bm25={len(bm25)} sem={len(sem)}\n"
             ); sys.stderr.flush()
             all_docs.extend(bm25 + sem)
+
         sys.stderr.write(f"[RETR] pre-dedup: {len(all_docs)}\n")
         sys.stderr.flush()
+
+        # 去重
         unique = []
         seen = set()
         for d in all_docs:
             h = hashlib.md5(d.page_content.encode()).hexdigest()
             if h not in seen:
                 seen.add(h); unique.append(d)
+
+        # 重排序
+        if _rerank:
+            unique = self._rerank(rewritten, unique)
+            sys.stderr.write(
+                f"[RETR] reranked → top-{_top_k}: {min(len(unique), _top_k)}\n"
+            ); sys.stderr.flush()
+            return unique[:_top_k]
+
         sys.stderr.write(
-            f"[RETR] top-{self.config.RERANK_TOP_K}: "
-            f"{min(len(unique), self.config.RERANK_TOP_K)}\n"
+            f"[RETR] top-{_top_k}: {min(len(unique), _top_k)}\n"
         ); sys.stderr.flush()
-        return unique[:self.config.RERANK_TOP_K]
+        return unique[:_top_k]

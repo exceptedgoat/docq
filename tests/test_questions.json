@@ -1,0 +1,107 @@
+[
+  {
+    "id": "q01",
+    "question": "BETA API每分钟限流是多少？",
+    "answer": "每密钥每分钟请求上限为 60 次。",
+    "relevant_docs": ["doc_beta.md", "doc_products.md"],
+    "keywords": ["Beta", "60", "每分钟", "限流", "请求上限"]
+  },
+  {
+    "id": "q02",
+    "question": "BETA API的令牌桶突发容量是多少？",
+    "answer": "令牌桶突发容量为 120，即短时间内最多可发出 120 个请求。",
+    "relevant_docs": ["doc_beta.md", "doc_products.md"],
+    "keywords": ["Beta", "120", "令牌桶", "突发"]
+  },
+  {
+    "id": "q03",
+    "question": "BETA的数据默认保留多少天？",
+    "answer": "用户上传的实验数据默认保留 30 天，可在设置中延长至 90 天。",
+    "relevant_docs": ["doc_beta.md"],
+    "keywords": ["Beta", "30", "数据保留", "回收站"]
+  },
+  {
+    "id": "q04",
+    "question": "BETA公测期结束后预计如何收费？",
+    "answer": "正式发布后按调用次数计费，预计定价为每千次调用 0.5 元。",
+    "relevant_docs": ["doc_beta.md", "doc_products.md"],
+    "keywords": ["Beta", "0.5元", "定价", "公测", "千次"]
+  },
+  {
+    "id": "q05",
+    "question": "Alpha的每月免费额度是多少？",
+    "answer": "每月免费额度为前 1000 次调用免费。",
+    "relevant_docs": ["doc_alpha.md", "doc_products.md"],
+    "keywords": ["Alpha", "1000", "免费额度", "计费"]
+  },
+  {
+    "id": "q06",
+    "question": "Alpha超出免费额度后每次调用收费多少？",
+    "answer": "超出免费额度后每次调用收费 0.02 元。",
+    "relevant_docs": ["doc_alpha.md", "doc_products.md"],
+    "keywords": ["Alpha", "0.02元", "超出", "收费"]
+  },
+  {
+    "id": "q07",
+    "question": "Alpha工作时间的可用性SLA是多少？",
+    "answer": "工作日 9:00–18:00 内承诺可用性 99.5%。",
+    "relevant_docs": ["doc_alpha.md", "doc_products.md"],
+    "keywords": ["Alpha", "99.5%", "SLA", "可用性", "工作时间"]
+  },
+  {
+    "id": "q08",
+    "question": "Alpha的故障响应时间是多少？",
+    "answer": "P0 故障 15 分钟内响应，P1 故障 1 小时内响应。",
+    "relevant_docs": ["doc_alpha.md"],
+    "keywords": ["Alpha", "15分钟", "1小时", "故障响应", "P0", "P1"]
+  },
+  {
+    "id": "q09",
+    "question": "Gamma的QPS限制是多少？",
+    "answer": "Gamma 的 QPS 限制为每秒 10 次。",
+    "relevant_docs": ["doc_products.md"],
+    "keywords": ["Gamma", "QPS", "每秒10次"]
+  },
+  {
+    "id": "q10",
+    "question": "Beta API超出限流后会返回什么状态码？",
+    "answer": "超出限流后返回 HTTP 429 状态码，Retry-After 头指示重试等待秒数。",
+    "relevant_docs": ["doc_beta.md"],
+    "keywords": ["Beta", "429", "Retry-After", "限流"]
+  },
+  {
+    "id": "q11",
+    "question": "Alpha和Beta的API密钥可以混用吗？",
+    "answer": "不可以混用。Alpha 与 Beta 的计费账户互通，但 API 密钥相互独立。",
+    "relevant_docs": ["doc_beta.md"],
+    "keywords": ["Alpha", "Beta", "API密钥", "混用", "独立"]
+  },
+  {
+    "id": "q12",
+    "question": "BETA是免费的还是收费的？",
+    "answer": "公测期间免费，正式发布后按调用次数计费，预计每千次 0.5 元。",
+    "relevant_docs": ["doc_beta.md", "doc_products.md"],
+    "keywords": ["Beta", "免费", "公测", "收费"]
+  },
+  {
+    "id": "q13",
+    "question": "Alpha的维护窗口是什么时候？",
+    "answer": "每月第一个周日凌晨 2:00–4:00，提前 48 小时邮件通知。",
+    "relevant_docs": ["doc_alpha.md", "doc_products.md"],
+    "keywords": ["Alpha", "维护窗口", "周日", "2:00", "4:00"]
+  },
+  {
+    "id": "q14",
+    "question": "BETA回收站内数据保留几天？",
+    "answer": "回收站内数据保留 7 天后彻底删除。",
+    "relevant_docs": ["doc_beta.md"],
+    "keywords": ["Beta", "7天", "回收站", "删除"]
+  },
+  {
+    "id": "q15",
+    "question": "Alpha的紧急故障热线是什么？",
+    "answer": "紧急故障热线为 400-123-4567，7×24 小时可用。",
+    "relevant_docs": ["doc_alpha.md"],
+    "keywords": ["Alpha", "400-123-4567", "故障热线"]
+  }
+]
