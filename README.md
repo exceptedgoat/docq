@@ -128,6 +128,8 @@ python gen_ppt.py
 | RERANK_TOP_K            | 6                        | 重排序后保留数  |
 | MULTI_QUERY_COUNT       | 4                        | 多查询生成数   |
 | MAX_CONVERSATION_TURNS  | 6                        | 最大对话轮数   |
+| MIN_PARAGRAPH_LENGTH    | 50                       | 最小段落长度   |
+| MAX_SEMANTIC_CHUNK_SIZE | 1200                     | 最大语义块大小  |
 
 
 ## 准确度评估
@@ -177,14 +179,33 @@ evaluator.export_report_json(report, './eval_results/report.json')
 
 实验框架支持多组配置的 A/B 测试，量化每次 RAG 优化带来的准确率提升。
 
-### 预置实验组
+### 预置实验组（共 11 组）
 
-| 实验组 | 命令参数 | 内容 |
-| ------ | -------- | ---- |
-| 检索策略对比 | `retrieval` | BM25-only / Semantic-only / Hybrid / Full-pipeline(含Reranker) |
-| Top-K 值对比 | `topk` | K=3 / K=6(默认) / K=12 |
-| 查询优化策略对比 | `query` | 无优化 / 仅改写 / 仅多查询 / 完整优化 |
-| 全部实验 | `all` | 上述三组合并运行 |
+**A 组：检索策略对比（4 组）**
+
+| 配置名 | 说明 |
+| ------ | ---- |
+| A1-BM25 | 仅 BM25 关键词检索 |
+| A2-Semantic | 仅 ChromaDB 语义检索 |
+| A3-Hybrid | BM25 + 语义混合检索（无重排序） |
+| A4-Full | 混合检索 + CrossEncoder 重排序（完整流水线） |
+
+**B 组：Top-K 值对比（3 组）**
+
+| 配置名 | 说明 |
+| ------ | ---- |
+| B1-K3 | 混合检索，最终保留 3 篇文档 |
+| B2-K6 | 混合检索，最终保留 6 篇文档（默认值） |
+| B3-K12 | 混合检索，最终保留 12 篇文档 |
+
+**C 组：查询优化策略对比（4 组）**
+
+| 配置名 | 说明 |
+| ------ | ---- |
+| C1-Raw | 原始查询，无改写无多查询 |
+| C2-Rewrite | 仅查询改写（纠正拼写、补全术语） |
+| C3-MultiQuery | 仅多角度查询生成（4 个变体并行检索） |
+| C4-Full | 查询改写 + 多查询生成（当前默认行为） |
 
 ### 运行实验
 
@@ -218,7 +239,5 @@ python -m src.rag.experiment topk --output-dir ./my_results
 - `ENABLE_QUERY_REWRITE`：控制是否进行查询改写
 - `ENABLE_MULTI_QUERY`：控制是否生成多角度查询变体
 - `RERANK_TOP_K`：最终保留的文档数量
-| MIN_PARAGRAPH_LENGTH    | 50                       | 最小段落长度   |
-| MAX_SEMANTIC_CHUNK_SIZE | 1200                     | 最大语义块大小  |
 
 
