@@ -42,6 +42,9 @@ class GeneralConfig:
     SEMANTIC_K   = 12
     RERANK_TOP_K = 6
 
+    RETRIEVAL_MODE = "hybrid"    # "bm25" | "semantic" | "hybrid"
+    ENABLE_RERANK  = False       # 是否启用 CrossEncoder 重排序
+
     DEBUG_MODE       = False
     ENABLE_LLM_CACHE = True
 

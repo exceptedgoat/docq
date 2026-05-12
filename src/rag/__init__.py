@@ -13,6 +13,13 @@ from .retriever import GeneralHybridRetriever
 from .generator import GeneralGenerator
 from .rag import GeneralTerminalRAG
 from .conversation_store import ConversationStore
+from .evaluate import RAGEvaluator, EvalResult, ExperimentReport
+from .experiment import (
+    RAGExperimentRunner, ComparisonReport, ExperimentDef,
+    PRESET_GROUPS,
+    preset_retrieval_strategies, preset_top_k,
+    preset_query_optimizations, preset_all,
+)
 
 __all__ = [
     "GeneralConfig",
@@ -23,4 +30,11 @@ __all__ = [
     "GeneralGenerator",
     "GeneralTerminalRAG",
     "ConversationStore",
+    "RAGEvaluator",
+    "EvalResult",
+    "ExperimentReport",
+    "RAGExperimentRunner",
+    "ComparisonReport",
+    "ExperimentDef",
+    "PRESET_GROUPS",
 ]
