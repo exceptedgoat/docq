@@ -27,8 +27,7 @@
 │       ├── web.py                # Flask 路由 + SSE 流式端点
 │       ├── templates.py          # 前端 HTML 模板加载器
 │       ├── main.py               # 启动入口（终端 / Web 模式切换）
-│       ├── extract_templates.py  # 一次性脚本：从 rag_new_v2.py 提取 HTML 模板
-│       └── _templates.py         # 提取后的 HTML 模板（由 extract_templates.py 生成）
+│       └── _templates.py         # 前端 HTML/CSS/JS 模板
 ├── requirements.txt              # Python 依赖清单
 └── README.md                     # 本文件
 ```
@@ -72,13 +71,7 @@ OPENAI_MODEL=deepseek-chat
 
 将需要索引的文档放入 `docs/` 文件夹，支持的格式：`.pdf` `.txt` `.md` `.docx` `.doc` `.xlsx` `.xls` `.pptx` `.ppt`
 
-### 4. 提取 Web 前端模板（仅首次，Web 模式需要）
-
-```bash
-python src/rag/extract_templates.py
-```
-
-### 5. 启动
+### 4. 启动
 
 **终端交互模式：**
 
@@ -94,7 +87,7 @@ python -m src.rag.main web
 
 然后浏览器访问 `http://localhost:7860`
 
-### 6. 生成 PPT
+### 5. 生成 PPT
 
 ```bash
 python gen_ppt.py

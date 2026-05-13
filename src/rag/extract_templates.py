@@ -1,27 +1,6 @@
 """
-一次性脚本：从 rag_new_v2.py 中提取 WEB_HTML 常量 → _templates.py
-运行一次即可：
-    python src/rag/extract_templates.py
+前端模板已内置于 _templates.py，无需额外提取步骤。
+此文件保留用于兼容旧命令，直接启动即可。
 """
-import re
-import os
-
-SRC = os.path.join(os.path.dirname(__file__), "..", "..", "rag_new_v2.py")
-DST = os.path.join(os.path.dirname(__file__), "_templates.py")
-
-with open(SRC, "r", encoding="utf-8") as f:
-    content = f.read()
-
-# 匹配 WEB_HTML = r"""...""" 直到下一个顶层 def
-pattern = r'WEB_HTML = r(""".+?""")\s*\ndef create_web_app'
-match = re.search(pattern, content, re.DOTALL)
-if not match:
-    print("ERROR: 未找到 WEB_HTML 常量")
-    exit(1)
-
-html_literal = match.group(1)  # 包含 r""" 和 """
-with open(DST, "w", encoding="utf-8") as f:
-    f.write(f'"""Glacial Archive 前端模板 (自动提取)"""\n')
-    f.write(f'WEB_HTML = r{html_literal}\n')
-
-print(f"提取成功: {DST}  ({len(html_literal)} 字符)")
+if __name__ == "__main__":
+    print("模板已内置于 src/rag/_templates.py，无需额外提取。")

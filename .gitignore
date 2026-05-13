@@ -21,11 +21,10 @@ build/
 # 环境变量（含 API Key，绝对不能提交）
 .env
 
-# 自动生成的前端模板
-src/rag/_templates.py
 
 # 旧模块（已重构为 src/rag/）
 src/rag_new/
+rag_new_v2.py
 
 # IDE
 .vscode/
